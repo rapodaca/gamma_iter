@@ -44,7 +44,8 @@ pub fn greedy<G: Graph>(graph: &G) -> Pairing {
     let mut nodes = HashSet::new();
 
     for graph in components(graph) {
-        let traversal = DepthFirst::new(&graph, graph.nodes()[0]).expect(
+        let root = graph.nodes().next().expect("root");
+        let traversal = DepthFirst::new(&graph, root).expect(
             "could not create depth-first traversal"
         );
 

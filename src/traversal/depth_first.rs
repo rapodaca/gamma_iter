@@ -47,7 +47,7 @@ impl<'a, G: Graph> DepthFirst<'a, G> {
         let mut stack = Vec::new();
     
         for neighbor in graph.neighbors(root)? {
-            stack.push((root, *neighbor));
+            stack.push((root, neighbor));
         }
     
         nodes.insert(root);
@@ -87,9 +87,12 @@ impl<'a, G> Iterator for DepthFirst<'a, G>
                 if self.nodes.contains(&node) {
                     Some(Step::new(parent, node, true))
                 } else {
-                    let neighbors = self.graph.neighbors(node).unwrap().to_vec();
+                    let mut neighbors = self.graph.neighbors(node).unwrap()
+                        .collect::<Vec<_>>();
+                    
+                    neighbors.reverse();
 
-                    for neighbor in neighbors.into_iter().rev() {
+                    for neighbor in neighbors {
                         if neighbor == parent {
                             continue;
                         }
